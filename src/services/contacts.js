@@ -2,8 +2,16 @@ import ContactModel from '../db/models/Contact.js';
 import calculatePaginationData from '../utils/calculatePaginationData.js';
 import { SORT_ORDER } from '../constants/index.js';
 
-export const getContacts = async ({ perPage, page, sortBy = 'name', sortOrder = SORT_ORDER[0], filter = {} }) => {
+export const getContacts = async ({ perPage,
+	page,
+	sortBy = 'name',
+	sortOrder = SORT_ORDER[0],
+	filter = {},
+}) => {
 	const skip = (page - 1) * perPage;
+	if (filter.userId) {
+		ContactModel.find().where("userId").eq(filter.userId);
+	}
 	const contacts = await ContactModel.find(filter).skip(skip).limit(perPage).sort({ [sortBy]: sortOrder });
 	const count = await ContactModel.find(filter).countDocuments();
 	// console.log(filter);
@@ -19,7 +27,7 @@ export const getContacts = async ({ perPage, page, sortBy = 'name', sortOrder = 
 	};
 };
 
-export const getContactById = (id) => ContactModel.findById(id);
+export const getContact = (filter) => ContactModel.findById(filter);
 
 export const createContact = payload => ContactModel.create(payload);
 
