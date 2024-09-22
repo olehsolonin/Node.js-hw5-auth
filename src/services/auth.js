@@ -5,6 +5,20 @@ import SessionCollection from "../db/models/Session.js";
 import { randomBytes } from "crypto";
 import { accessTokenLifetime, refreshTokenLifetime } from "../constants/users.js";
 
+const createSession = () => {
+	const accessToken = randomBytes(30).toString("base64");
+	const refreshToken = randomBytes(30).toString("base64");
+	const accessTokenValidUntil = new Date(Date.now() + accessTokenLifetime);
+	const refreshTokenValidUntil = new Date(Date.now() + refreshTokenLifetime);
+
+	return {
+		accessToken,
+		refreshToken,
+		accessTokenValidUntil,
+		refreshTokenValidUntil,
+	};
+};
+
 
 export const signup = async (payload) => {
 	const { email, password } = payload;
@@ -36,17 +50,11 @@ export const signin = async (payload) => {
 
 	await SessionCollection.deleteOne({ userId: user._id });
 
-	const accessToken = randomBytes(30).toString("base64");
-	const refreshToken = randomBytes(30).toString("base64");
-	const accessTokenValidUntil = new Date(Date.now() + accessTokenLifetime);
-	const refreshTokenValidUntil = new Date(Date.now() + refreshTokenLifetime);
+	const sessionData = createSession();
 
 	const userSession = await SessionCollection.create({
 		userId: user._id,
-		accessToken,
-		refreshToken,
-		accessTokenValidUntil,
-		refreshTokenValidUntil,
+		...sessionData,
 	});
 
 	return userSession;

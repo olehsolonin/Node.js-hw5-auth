@@ -11,5 +11,8 @@ authRouter.post("/signup", validateBody(userSignupSchema), ctrlWrapper(authContr
 
 authRouter.post("/signin", validateBody(userSigninSchema), ctrlWrapper(authControllers.signinController));
 
+authRouter.post("/refresh", ctrlWrapper(authControllers.refreshController));
+
+authRouter.post("/signout", ctrlWrapper(authControllers.signoutController));
 
 export default authRouter;
