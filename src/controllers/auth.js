@@ -13,8 +13,8 @@ const setupSession = (res, session) => {
 	});
 };
 
-export const signupController = async (req, res) => {
-	const newUser = await authServices.signup(req.body);
+export const registerController = async (req, res) => {
+	const newUser = await authServices.register(req.body);
 
 	res.status(201).json({
 		status: 201,

@@ -20,7 +20,7 @@ const createSession = () => {
 };
 
 
-export const signup = async (payload) => {
+export const register = async (payload) => {
 	const { email, password } = payload;
 
 	const user = await UserCollection.findOne({ email });
