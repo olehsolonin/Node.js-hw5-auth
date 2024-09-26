@@ -18,13 +18,13 @@ export const registerController = async (req, res) => {
 
 	res.status(201).json({
 		status: 201,
-		message: "Succsessfully register user",
+		message: "Successfully registered a user!",
 		data: newUser,
 	});
 };
 
-export const signinController = async (req, res) => {
-	const session = await authServices.signin(req.body);
+export const loginController = async (req, res) => {
+	const session = await authServices.login(req.body);
 
 	res.cookie("refreshToken", session.refreshToken, {
 		httpOnly: true,
@@ -38,7 +38,7 @@ export const signinController = async (req, res) => {
 
 	res.json({
 		status: 200,
-		message: "Successfully signin",
+		message: "Successfully logged in an user!",
 		data: {
 			accessToken: session.accessToken,
 		}
@@ -53,17 +53,17 @@ export const refreshController = async (req, res) => {
 
 	res.json({
 		status: 200,
-		message: "Successfully refresh session",
+		message: "Successfully refreshed a session!",
 		data: {
 			accessToken: session.accessToken,
 		}
 	});
 };
 
-export const signoutController = async (req, res) => {
+export const logoutController = async (req, res) => {
 	const { sessionId } = req.cookies;
 	if (sessionId) {
-		await authServices.signout(sessionId);
+		await authServices.logout(sessionId);
 	}
 
 	res.clearCookie("sessionId");

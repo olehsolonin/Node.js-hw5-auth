@@ -25,7 +25,7 @@ export const register = async (payload) => {
 
 	const user = await UserCollection.findOne({ email });
 	if (user) {
-		throw createHttpError(409, "Email already exist");
+		throw createHttpError(409, "Email in use");
 	}
 
 	const hashPassword = await bcrypt.hash(password, 10);
@@ -36,7 +36,7 @@ export const register = async (payload) => {
 	return data._doc;
 };
 
-export const signin = async (payload) => {
+export const login = async (payload) => {
 	const { email, password } = payload;
 	const user = await UserCollection.findOne({ email });
 	if (!user) {
@@ -90,7 +90,7 @@ export const refreshSession = async ({ refreshToken, sessionId }) => {
 	return userSession;
 };
 
-export const signout = async (sessionId) => {
+export const logout = async (sessionId) => {
 	await SessionCollection.deleteOne({ _id: sessionId });
 };
 
